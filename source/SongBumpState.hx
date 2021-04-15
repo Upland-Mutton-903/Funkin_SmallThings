@@ -1,5 +1,7 @@
 package;
 
+import flixel.util.FlxColor;
+import flixel.text.FlxText;
 import flixel.util.FlxTimer;
 import flixel.tweens.FlxEase;
 import Conductor;
@@ -13,13 +15,15 @@ import Song.SwagSong;
 class SongBumpState extends MusicBeatState
 {
     public static var songToBop:String;
+    public static var useVocals:Bool;
+    public static var useInst:Bool;
 
     var logo:FlxSprite;
-
-    var scalar:Float;
-
     var song:SwagSong;
     var vocals:FlxSound;
+
+    var inText:FlxText;
+    var modeText:String;
 
     // CLASS CREATION
     override function create()
@@ -51,10 +55,8 @@ class SongBumpState extends MusicBeatState
             vocals = new FlxSound();
         }
 
-        logo = new FlxSprite();
-        logo.frames = Paths.getSparrowAtlas('logoBumpin');
+        logo = new FlxSprite().loadGraphic(Paths.image('logoStatic'));
         logo.antialiasing = true;
-        logo.animation.addByPrefix('bump', 'logo bumpin', 24);
         logo.updateHitbox();
         logo.screenCenter();
         logo.scale.x = 1.25;
@@ -64,6 +66,23 @@ class SongBumpState extends MusicBeatState
         add(logo);
 
         FlxG.drawFramerate = 24;
+
+        if (useVocals == true && useInst == true)
+            modeText = "INSTRUMENTAL + VOCALS";
+
+        if (useVocals == true && useInst == false)
+            modeText = "VOCALS";
+
+        if (useVocals == false && useInst == true)
+            modeText = "INSTRUMENTAL";
+
+        inText = new FlxText(0, 0, FlxG.width, "", 48);
+        inText.setFormat(Paths.font("vcr.ttf"), 48, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+        inText.visible = true;
+        add(inText);
+
+        inText.text = "BOPPING " + song.song + " AT " + song.bpm + "BPM\nMODE: " + modeText;
+        inText.screenCenter();
 
         // start song
         new FlxTimer().start(2.5, function(tmr:FlxTimer)
@@ -78,6 +97,9 @@ class SongBumpState extends MusicBeatState
         // mute vocals
         vocals.volume = 0;
 
+        vocals.pause();
+        FlxG.sound.music.pause();
+
         super.onFocusLost();
     }
 
@@ -86,6 +108,9 @@ class SongBumpState extends MusicBeatState
     {
         // unmute vocals
         vocals.volume = 1;
+
+        vocals.play();
+        FlxG.sound.music.play();
 
         // resync vocals
         this.resyncVocals();
@@ -136,12 +161,20 @@ class SongBumpState extends MusicBeatState
         // set logo visible
         logo.visible = true;
 
+        inText.visible = false;
+
         // play the music
         FlxG.sound.playMusic(Paths.inst(song.song), 1, false);
         FlxG.sound.music.onComplete = this.endSong;
 
         // play the vocals
         vocals.play();
+
+        if (useVocals == false)
+            vocals.volume = 0;
+
+        if (useInst == false)
+            FlxG.sound.music.volume = 0;
     }
 
     // END SONG

@@ -1,5 +1,6 @@
 package;
 
+import flixel.addons.transition.FlxTransitionableState;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -22,7 +23,7 @@ class FreeplayState extends MusicBeatState
 
 	var selector:FlxText;
 	var curSelected:Int = 0;
-	var curDifficulty:Int = 1;
+	var curDifficulty:Int = 2;
 
 	var scoreText:FlxText;
 	var diffText:FlxText;
@@ -195,7 +196,8 @@ class FreeplayState extends MusicBeatState
 		if (Math.abs(lerpScore - intendedScore) <= 10)
 			lerpScore = intendedScore;
 
-		scoreText.text = "PERSONAL BEST:" + lerpScore;
+		// scoreText.text = "PERSONAL BEST:" + lerpScore;
+		scoreText.text = "BUMP MODE";
 
 		var upP = controls.UP_P;
 		var downP = controls.DOWN_P;
@@ -238,6 +240,10 @@ class FreeplayState extends MusicBeatState
 
 			FlxG.sound.music.stop();
 			SongBumpState.songToBop = songs[curSelected].songName.toLowerCase();
+
+			FlxTransitionableState.skipNextTransIn = true;
+			FlxTransitionableState.skipNextTransOut = true;
+
 			LoadingState.loadAndSwitchState(new SongBumpState());
 		}
 	}
@@ -258,11 +264,17 @@ class FreeplayState extends MusicBeatState
 		switch (curDifficulty)
 		{
 			case 0:
-				diffText.text = "EASY";
+				diffText.text = "VOCALS";
+				SongBumpState.useVocals = true;
+				SongBumpState.useInst = false;
 			case 1:
-				diffText.text = 'NORMAL';
+				diffText.text = 'INSTRUMENTAL';
+				SongBumpState.useVocals = false;
+				SongBumpState.useInst = true;
 			case 2:
-				diffText.text = "HARD";
+				diffText.text = "BOTH";
+				SongBumpState.useVocals = true;
+				SongBumpState.useInst = true;
 		}
 	}
 
