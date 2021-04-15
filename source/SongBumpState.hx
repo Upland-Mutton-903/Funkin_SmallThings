@@ -1,13 +1,21 @@
 package;
 
+import flixel.tweens.FlxEase;
 import Conductor;
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.system.FlxSound;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import Song.SwagSong;
 
 class SongBumpState extends MusicBeatState
 {
     public static var songToBop:String;
+
+    var logo:FlxSprite;
+
+    var scalar:Float;
 
     var song:SwagSong;
     var vocals:FlxSound;
@@ -41,6 +49,17 @@ class SongBumpState extends MusicBeatState
         } else {
             vocals = new FlxSound();
         }
+
+        logo = new FlxSprite();
+        logo.frames = Paths.getSparrowAtlas('logoBumpin');
+        logo.antialiasing = true;
+        logo.animation.addByPrefix('bump', 'logo bumpin', 24);
+        logo.updateHitbox();
+        logo.screenCenter();
+        logo.scale.x = 1.25;
+        logo.scale.y = 1.25;
+
+        add(logo);
 
         // start song
         this.startSong();
@@ -79,10 +98,24 @@ class SongBumpState extends MusicBeatState
     // BEAT HIT
     override function beatHit()
     {
-        // TEST
-        trace("BEAT HIT");
-
         super.beatHit();
+
+        FlxTween.tween(logo.scale, {x: 1.35, y: 1.35,}, 0.125, {
+            ease: FlxEase.quartInOut,
+            onComplete: function(tween:FlxTween)
+            {
+                FlxTween.tween(logo.scale, {x: 1.25, y: 1.25}, 0.125, {ease: FlxEase.quartInOut});
+            }
+        });
+
+        if (song.notes[Math.floor(curStep / 16)] != null)
+        {
+            if (song.notes[Math.floor(curStep / 16)].changeBPM)
+            {
+                Conductor.changeBPM(song.notes[Math.floor(curStep / 16)].bpm);
+                // trace('CHANGED BPM!');
+            }
+        }
     }
 
     // START SONG
