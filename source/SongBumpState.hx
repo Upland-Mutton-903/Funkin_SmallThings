@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxTimer;
 import flixel.tweens.FlxEase;
 import Conductor;
 import flixel.FlxG;
@@ -58,11 +59,17 @@ class SongBumpState extends MusicBeatState
         logo.screenCenter();
         logo.scale.x = 1.25;
         logo.scale.y = 1.25;
+        logo.visible = false;
 
         add(logo);
 
+        FlxG.drawFramerate = 24;
+
         // start song
-        this.startSong();
+        new FlxTimer().start(2.5, function(tmr:FlxTimer)
+        {
+            this.startSong();
+        });
     }
 
     // ON FOCUS LOST
@@ -91,6 +98,11 @@ class SongBumpState extends MusicBeatState
     {
         // update beat and step
         Conductor.songPosition = FlxG.sound.music.time;
+
+        // ENTER KEY
+        if (FlxG.keys.justPressed.ENTER) {
+            this.endSong();
+        }
 
         super.update(elapsed);
     }
@@ -121,11 +133,29 @@ class SongBumpState extends MusicBeatState
     // START SONG
     function startSong():Void
     {
+        // set logo visible
+        logo.visible = true;
+
         // play the music
         FlxG.sound.playMusic(Paths.inst(song.song), 1, false);
+        FlxG.sound.music.onComplete = this.endSong;
 
         // play the vocals
         vocals.play();
+    }
+
+    // END SONG
+    function endSong():Void
+    {
+        FlxG.sound.music.volume = 0;
+        vocals.volume = 0;
+        logo.visible = false;
+        FlxG.drawFramerate = 60;
+
+        new FlxTimer().start(2.5, function(tmr:FlxTimer)
+        {
+            FlxG.switchState(new FreeplayState());
+        });
     }
 
     // RESYNC VOCALS
