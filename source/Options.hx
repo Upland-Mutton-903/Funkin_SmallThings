@@ -59,6 +59,10 @@ class STOptions
 	}
 }
 
+class STLogoBumpOptions {
+	var songToBop:String = "monster";
+}
+
 typedef STOptionFileSection = {
 	var name:String;
 	var value:Bool;
