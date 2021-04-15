@@ -71,5 +71,6 @@ class MusicBeatState extends FlxUIState
 	public function beatHit():Void
 	{
 		//do literally nothing dumbass
+		return;
 	}
 }
