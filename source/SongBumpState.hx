@@ -25,6 +25,8 @@ class SongBumpState extends MusicBeatState
     var inText:FlxText;
     var modeText:String;
 
+    var hasEnded:Bool;
+
     // CLASS CREATION
     override function create()
     {
@@ -85,7 +87,7 @@ class SongBumpState extends MusicBeatState
         inText.screenCenter();
 
         // start song
-        new FlxTimer().start(2.5, function(tmr:FlxTimer)
+        new FlxTimer().start(3.5, function(tmr:FlxTimer)
         {
             this.startSong();
         });
@@ -94,11 +96,13 @@ class SongBumpState extends MusicBeatState
     // ON FOCUS LOST
     override function onFocusLost()
     {
-        // mute vocals
-        vocals.volume = 0;
+        if (hasEnded == false) {
+            // mute vocals
+            vocals.volume = 0;
 
-        vocals.pause();
-        FlxG.sound.music.pause();
+            vocals.pause();
+            FlxG.sound.music.pause();
+        }
 
         super.onFocusLost();
     }
@@ -106,14 +110,16 @@ class SongBumpState extends MusicBeatState
     // ON FOCUS
     override function onFocus()
     {
-        // unmute vocals
-        vocals.volume = 1;
+        if (hasEnded == false) {
+            // unmute vocals
+            vocals.volume = 1;
 
-        vocals.play();
-        FlxG.sound.music.play();
+            vocals.play();
+            FlxG.sound.music.play();
 
-        // resync vocals
-        this.resyncVocals();
+            // resync vocals
+            this.resyncVocals();
+        }
 
         super.onFocus();
     }
@@ -175,17 +181,24 @@ class SongBumpState extends MusicBeatState
 
         if (useInst == false)
             FlxG.sound.music.volume = 0;
+
+        hasEnded = false;
     }
 
     // END SONG
     function endSong():Void
     {
+        hasEnded = true;
+
         FlxG.sound.music.volume = 0;
         vocals.volume = 0;
         logo.visible = false;
         FlxG.drawFramerate = 60;
 
-        new FlxTimer().start(2.5, function(tmr:FlxTimer)
+        inText.text = "ENDING SONG...";
+        inText.visible = true;
+
+        new FlxTimer().start(3.5, function(tmr:FlxTimer)
         {
             FlxG.switchState(new FreeplayState());
         });
