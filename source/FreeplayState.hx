@@ -222,6 +222,7 @@ class FreeplayState extends MusicBeatState
 
 		if (accepted)
 		{
+			/*
 			var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
 
 			trace(poop);
@@ -233,6 +234,11 @@ class FreeplayState extends MusicBeatState
 			PlayState.storyWeek = songs[curSelected].week;
 			trace('CUR WEEK' + PlayState.storyWeek);
 			LoadingState.loadAndSwitchState(new PlayState());
+			*/
+
+			FlxG.sound.music.stop();
+			SongBumpState.songToBop = songs[curSelected].songName.toLowerCase();
+			LoadingState.loadAndSwitchState(new SongBumpState());
 		}
 	}
 
