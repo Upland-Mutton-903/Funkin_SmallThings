@@ -1,5 +1,6 @@
 package;
 
+import Options.STLogoBumpOptions;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
 import flixel.util.FlxTimer;
@@ -57,7 +58,13 @@ class SongBumpState extends MusicBeatState
             vocals = new FlxSound();
         }
 
-        logo = new FlxSprite().loadGraphic(Paths.image('logoStatic'));
+        if (STLogoBumpOptions.logoToUse == "st")
+            logo = new FlxSprite().loadGraphic(Paths.image('logoStatic'));
+        else if (STLogoBumpOptions.logoToUse == "og")
+            logo = new FlxSprite().loadGraphic(Paths.image('logoStatic_OG'));
+        else
+            logo = new FlxSprite().loadGraphic(Paths.image('logoStatic'));
+
         logo.antialiasing = true;
         logo.updateHitbox();
         logo.screenCenter();

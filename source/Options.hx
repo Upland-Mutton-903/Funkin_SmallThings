@@ -60,6 +60,7 @@ class STOptions
 }
 
 class STLogoBumpOptions {
+	public static var logoToUse:String = "og"; // [st] / [og]
 	var songToBop:String = "monster";
 }
 
