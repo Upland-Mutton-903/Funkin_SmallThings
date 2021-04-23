@@ -58,7 +58,8 @@ class SongBumpState extends MusicBeatState
             vocals = new FlxSound();
         }
 
-        logo = new FlxSprite().loadGraphic(Paths.image('logo_' + STLogoBumpOptions.logoToUse));
+        logo = new FlxSprite().loadGraphic(Paths.image('logos/logo_' + STLogoBumpOptions.logoToUse));
+        trace('logo_' + STLogoBumpOptions.logoToUse);
 
         logo.antialiasing = true;
         logo.updateHitbox();
