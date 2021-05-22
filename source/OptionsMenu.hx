@@ -210,8 +210,11 @@ class OptionsMenu extends MusicBeatState
 
 		if (controls.BACK) {
 			STOptionsRewrite.Save();
-			FlxG.switchState(new NoticeSubState("HEY!\n\nMost options currently require a game restart to work properly!\n\nPress ENTER to continue."));
-			//FlxG.switchState(new MainMenuState());
+			// ONCE AGAIN, I HAVE BESTED MusicBeatState.hx, FORCING THE PlayerSettings.hx INTO DOING
+			// THE BIDDING THAT MusicBeatState.hx PREVENTED!
+			PlayerSettings.player1.controls.setKeyboardScheme(Controls.KeyboardScheme.Solo);
+			trace("SAVED & CHANGED KEYBINDS!");
+			FlxG.switchState(new MainMenuState());
 		}
 
 		// graphic updaters
