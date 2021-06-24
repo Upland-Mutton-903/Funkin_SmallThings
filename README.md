@@ -1,12 +1,4 @@
-
-# Friday Night Funkin: Small Things
-
-This is the repository for the Friday Night Funkin: Small Things Engine.
-
-## WHAT IS IT?
-
-Friday Night Funkin' Small Things is an enhancement mod for Friday Night Funkin' that I've created to enhance the base gameplay experience.
-
+# Leave
 ## CREDITS
 - [AyeTSG](https://twitter.com/AyeTSG) (Programming)
 - Pirlo (Extra pixel-art assets)
